@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>www.jb51.net JS写字板</title>
+<style type="text/css">
+#cans{
+display: block;
+margin: 0 auto;
+}
+#selectColor{
+ margin: 0 auto;
+   width: 400px;
+/* height: 50px;*/
+ text-align: center;
+ margin-top: 10px;
+ list-style: none;
+}
+.all{
+/*width: 10%;
+height: 95%;*/
+width: 60px;
+height: 50px;
+border: 1px solid #CCCCCC;
+float: left;
+margin-left: 10px;
+border-radius:6px ;
+cursor: pointer;
+}
+#red{
+background-color: red;
+}
+#yellow{
+background: yellow;
+}
+#black{
+background: black;
+}
+#green{
+background: green;
+}
+#blue{
+background: #0000FF;
+}
+#clear{
+margin-left: 10px;
+}
+#fontW{
+width: 400px;
+margin: 0 auto;
+}
+</style>
+</head>
+<body>
+<canvas id="cans">
+您的浏览器不支持该功能！
+</canvas>
+<ul id="selectColor">
+<li class="all" id="red" onclick="changecolor('red'),ss(this)"></li>
+<li class="all" id="yellow" onclick="changecolor('yellow'),ss(this)"></li>
+<li class="all" id="black" onclick="changecolor('black'),ss(this)"></li>
+<li class="all" id="green" onclick="changecolor('green'),ss(this)"></li>
+<li class="all" id="blue" onclick="changecolor('blue'),ss(this)"></li>
+</ul></br>
+<input id="clear" type="button" value="重画"> <!--<onclick="clears()">-->
+</br></br>
+<div id="fontW">
+<strong>线条粗细：</strong>0<input type="range" id="ranges" min="0" max="20" onchange="changeW()" value="3"/>20
+</div>
+<script type="text/javascript">
+//初始化区
+var ranges=document.getElementById("ranges");
+var cans=document.getElementById("cans");
+var clear=document.getElementById("clear");
+cans.width=600;
+cans.height=600;
+var down=false;
+var up=false;
+var clears1=false;
+var lastmousePos={x:0,y:0};
+var curmousePos={x:0,y:0};
+var lastWidth;
+var curWidth=3;
+//设置canvas宽高
+var CanvasWidth=cans.width;
+var CanvasHeight=cans.height;
+var half_width=CanvasWidth/2;
+var half_height=CanvasHeight/2;
+var frameW=10;
+var lineW=1;
+//改变线条宽度
+function changeW(){
+curWidth=ranges.value;
+}
+var drawCol="black";
+//改变字体颜色
+function changecolor(s){
+        drawCol=s;
+      }
+var cts=cans.getContext("2d");
+//设置米字格子
+//开始绘制前设置基本样式
+drawcanvs()
+function drawcanvs(){
+cts.lineCap="round"
+cts.lineJoin="round"
+cts.lineWidth=frameW;
+cts.strokeStyle="red"
+cts.beginPath()
+ cts.moveTo(0,0);
+ cts.lineTo(CanvasWidth,0);
+ cts.lineTo(CanvasWidth,CanvasHeight);
+ cts.lineTo(0,CanvasHeight);
+cts.closePath()
+cts.stroke()
+//画x
+cts.lineWidth=lineW;
+cts.beginPath()
+cts.moveTo(0,0);
+cts.lineTo(CanvasWidth,CanvasHeight);
+cts.closePath()
+cts.stroke()
+cts.beginPath()
+cts.moveTo(CanvasWidth,0);
+cts.lineTo(0,CanvasHeight);
+cts.closePath()
+cts.stroke()
+cts.beginPath()
+cts.moveTo(half_width,0);
+cts.lineTo(half_width,CanvasHeight);
+cts.closePath()
+cts.stroke()
+cts.beginPath()
+cts.moveTo(0,half_height);
+cts.lineTo(CanvasWidth,half_height);
+cts.closePath()
+cts.stroke()
+}
+ cans.onmousemove=function(e){
+  var e=e||event;
+  var clx=e.clientX-cans.getBoundingClientRect().left;//将鼠标原点化为画布原点
+  var cly=e.clientY-cans.getBoundingClientRect().top;
+  curmousePos={x:clx,y:cly};
+  if(down){
+  //开始画
+  //设置画笔颜色、粗细等
+  cts.lineCap="round"
+  cts.lineJoin="round"
+  cts.lineWidth=curWidth;
+  cts.strokeStyle=drawCol;
+  //开始绘画
+  cts.save();
+  cts.beginPath();
+   cts.moveTo(lastmousePos.x,lastmousePos.y);
+   cts.lineTo(curmousePos.x,curmousePos.y);
+  cts.closePath();
+  cts.stroke();
+  cts.restore();
+  lastmousePos=curmousePos;
+  }
+  if(up){
+  down=false;
+  up=false;
+  }
+ }
+ //鼠标按下事件
+ cans.onmousedown=function(e){
+  var e=e||event;
+  e.preventDefault();
+  lastmousePos=curmousePos
+  down=true;
+ }
+ //鼠标松开事件
+ cans.onmouseup=function(e){
+  var e=e||event;
+  e.preventDefault();
+  up=true;
+ }
+ //计算速度
+// function calV(s,t){
+//   var v=s/t;
+//   if(v<0.1){
+//   curWidth=10;
+//   }else if(v>10){
+//   curWidth=2;
+//   }else{
+//   curWidth=5
+//   }
+// }
+     function changeBg(){
+     var all=document.getElementsByClassName("all");
+     for(var i=0;i<all.length;i++){
+     all[i].onmouseover=function(){
+     this.style.cssText="margin-top:-6px;box-shadow:3px 5px 5px black"
+     }
+     all[i].onmouseout=function(){
+     this.style.cssText="border: 1px solid #CCCCCC;"
+     }
+     }
+     }
+     changeBg()
+     //恢复原状
+      function ss(s){
+     s.style.cssText="margin-top:0px;box-shadow:none;"
+      }
+     //清除方法
+     clear.onmousedown=function (){
+      cts.clearRect(0,0,cans.width,cans.height);
+//     clears1=true;
+     }
+     //清除后重画
+     clear.onmouseup=function(){
+      drawcanvs();
+     }
+</script>
+</body>
+</html>

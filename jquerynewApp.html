@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>锦鲤登记</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  <link rel="stylesheet" href="{:ADDON_PUBLIC_PATH}/css/index.css"/>
+  <style type="text/css">
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="banner"></div>
+  <div class="form">
+    <div class="main">
+      <div class="main-title">活动信息填写</div>
+      <div class="main-item">
+        <div class="item-label">联系人</div>
+        <div class="item-input">
+          <input id="name" type="text" placeholder="请输入联系人" name="name">
+          <div class="err" id="nameErr">你还没有填写姓名</div>
+        </div>
+      </div>
+      <div class="main-item">
+        <div class="item-label">联系方式</div>
+        <div class="item-input">
+          <input id="phone" type="text" placeholder="请输入联系方式" name="phone">
+          <div class="err" id="phoneErr">你还没有填写联系方式</div>
+        </div>
+      </div>
+      <div class="main-item">
+        <div class="item-label">身份证</div>
+        <div class="item-input">
+          <input id="card" type="text" placeholder="请输入身份证" name="card">
+          <div class="err" id="cardErr">你还没有填写身份证</div>
+        </div>
+      </div>
+      <div class="main-item-code">
+        <div class="item-label">验证码</div>
+        <div class="gird-div">
+          <div class="item-input">
+            <input id="code" type="text" placeholder="请输入短信验证码" name="code">
+            <div class="err" id="codeErr">你还没有填写验证码</div>
+          </div>
+          <div class="code-buttom" id="code-buttom">发送验证码</div>
+        </div>
+      </div>
+      <div class="main-item">
+        <div class="item-label">上传截图</div>
+        <div class="item-row" id="uploadImg">
+        <div class="img">
+          <div class="flex-div">
+              <div><img src="{:ADDON_PUBLIC_PATH}/img/矢量.png" /></div>
+              <div>上传截图</div>
+          </div>
+        </div>
+        <input id="file" type="file"/>
+        </div>
+        <img id="imgPro" src=""/>
+      </div>
+      <div class="main-item-footer" id="main-item-footer">
+           提交
+      </div>
+    </div>
+  </div>
+  
+    <div class="footer">
+    <div class="footer-img">
+      <img src="{:ADDON_PUBLIC_PATH}/img/矩形3.png" alt=""/>
+    </div>
+    <div class="footer-div">
+      一、活动时间
+      <br/>
+      a.  商家招募时间：2018年11月1日-15日
+      <br/>
+      b.  活动开展时间：2018年11月15日-12月20日
+      <br/>
+      c.   活动公示时间：2018年12月25日-27日
+      <br/>
+      d.   线上抽奖并公布结果：2018年12月28日
+      <br/>
+      e.   奖品使用时间：2019年1月1日-2019年12月31日
+      <br/>
+      二、活动内容
+      <br/>
+      活动期间，在我行办理600元（含）定期存半年及以上，并转发本次活动链接，截图上传到【岭南兴业】公众号。后期对符合要求的用户发消息通知进行抽奖，参与抽奖的用户有机会成为“兴业独宠”，获得联合商家代金券一份。
+    </div>
+  </div>
+  
+  <div id="modal" class="modal">
+    <div class="mask"></div>
+    <div class="container">
+      <img id="modal-img" src="" alt=""/>
+      <div class="modal-div">长按二维码关注公众号</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js">
+</script>
+
+<script>
+  var blob;
+  var url = 'gz.cib.inrice.cn';
+
+$(function () {
+  function App(option) {
+    var o = {
+        data: function () {
+            var d = option.data() || {}
+            return d
+        },
+        dom: option.dom || {},
+        eventInit: option.eventInit || function () { console.log('there are no events here') },
+        methods: option.methods || function () {
+            console.log('there are no methods here')
+            return {}
+        },
+        ready: option.ready || function () { }
+    }
+    var model = function () {
+        var data = o.data()
+        var keys = Object.keys(data)
+        var i = keys.length
+        while (i--) {
+            o[keys[i]] = data[keys[i]]
+        }
+        return o
+    }()
+    var dom = o.dom
+    var eventInit = function () {
+        o.eventInit()
+    }()
+    var methods = function () {
+        var controller = o.methods()
+        var keys = Object.keys(controller)
+        var i = keys.length
+        while (i--) {
+            o[keys[i]] = controller[keys[i]]
+        }
+        console.log(o)
+        return o
+    }()
+    var init = function () {
+        o.ready()
+    }()
+    var config = function () {
+        return {
+            getVersion: function () {
+                console.log('当前版本是:0.0.1')
+            }
+        }
+    }
+    return config()
+  }
+  function setRem(doc, win) {
+      var docEl = doc.documentElement
+      var resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize'
+      var reCaculate = function () {
+        var clientWidth = docEl.clientWidth
+        // console.log(clientWidth)
+        if (!clientWidth) return
+        docEl.style.fontSize = 10 * (clientWidth / 375) + 'px'
+      }
+      if (!doc.addEventListener) return
+      doc.addEventListener('DOMContentLoaded', reCaculate, false)
+  }
+  window.alert = function(name){
+			var iframe = document.createElement("IFRAME");
+			iframe.style.display="none";
+			iframe.setAttribute("src", 'data:text/plain,');
+			document.documentElement.appendChild(iframe);
+			window.frames[0].window.alert(name);
+			iframe.parentNode.removeChild(iframe);
+	}
+  window.confirm = function(name){
+    var result = window.frames[0].window.confirm(name);
+    iframe.parentNode.removeChild(iframe);
+    return result;
+
+  }
+  setRem(document, window)
+  new App({
+      data(){
+        return {
+
+        }
+      },
+      dom: {
+        imgPro: $('#imgPro'),
+        modal: $('#modal'),
+        name: $('#name'),
+        phone: $('#phone'),
+        code: $('#code'),
+        card: $('#card'),
+        file: $('#file'),
+        nameErr: $('#nameErr'),
+        codeErr: $('#codeErr'),
+        phoneErr: $('#phoneErr'),
+        cardErr: $('#cardErr'),
+        fileErr: $('#fileErr'),
+        uploadImg: $('#uploadImg'),
+        modalImg: $('#modal-img'),
+        codeButtom: $('#code-buttom'),
+        mainItemFooter: $('#main-item-footer')
+      },
+      methods() {
+        var _this = this
+        return {
+          getActivity() {
+            $.ajax({
+              url: 'http://'+url+'/index.php',
+              data: {
+                s: '/addon/Koi/Wap/index_data',
+                id: 1
+              },
+              type: 'GET',
+              success: function (data) {
+                console.log(data,'data')
+                console.log(data.data.data_user,'req')
+                if(data.data.data_user.status === 0){
+                  _this.dom.modal.hide()
+                  _this.dom.modalImg.attr('src', data.data.data_user.url)
+                }
+              }
+            })
+          },
+          getCode(){
+            var phone = _this.dom.phone.val()
+            $.ajax({
+              url: 'http://'+ url+ '/index.php?s=/addon/Koi/Wap/send_sms_code',
+              data: {
+                s: '/addon/Koi/Wap/send_sms_code',
+                phone: phone
+              },
+              type: 'POST',
+              success: function (data) {
+                console.log(data, 'data')
+                alert(data.msg)
+                // if(+data.result === 1){
+                //   alert(data.msg)
+                // }else{
+                //   alert(data.msg)
+                // }
+              }
+            })
+          },
+          submit (){
+            var name = _this.dom.name.val()
+            var card = _this.dom.card.val()
+            var phone = _this.dom.phone.val()
+            var code = _this.dom.code.val()
+            var file= _this.dom.file[0].files[0]
+            console.log(name, 'name')
+            console.log(phone, 'phone')
+            console.log(code, 'code')
+            console.log(file, 'file')
+            if(name === '')
+            {
+              _this.dom.nameErr.show()
+              return
+            }else{
+              _this.dom.nameErr.hide()
+            }
+            if(phone === '')
+            {
+              _this.dom.phoneErr.show()
+              return
+            }else{
+              _this.dom.phoneErr.hide()
+            }
+            if(card === '')
+            {
+              _this.dom.cardErr.show()
+              return
+            }else{
+              _this.dom.cardErr.hide()
+            }
+            if(code === '')
+            {
+              _this.dom.codeErr.show()
+              return
+            }
+            else{
+              _this.dom.codeErr.hide()
+            }
+            if(file === '')
+            {
+            }
+            var fd = new FormData();
+            fd.append("s", '/addon/Koi/Wap/add');
+            fd.append("name", name);
+            fd.append("phone", phone);
+            fd.append("activity_id", 1);
+            fd.append("ID_card", card);
+            // fd.append("image", blob, 'image.png');
+            fd.append("image", file, 'image.png');
+            console.log(fd, 'form');
+            $.ajax({
+              url: 'http://'+url+'/index.php?s=/addon/Koi/Wap/add',
+              data: {
+                name: name,
+                phone: phone,
+                Id_Card: card,
+                code: code,
+                image: blob
+              },
+              contentType:false,
+              processData:false,
+              // data: fd,
+              // processData:false,
+              type: 'post',
+              success: function (data) {
+                console.log(data, 'data')
+                if(+data.error_code === 1){
+                  alert(data.msg)
+                }
+              },
+              error: function(e){
+                alert(e + "错误！！")
+              }
+            })
+          },
+          dataURItoBlob(base64Data) {
+            var byteString;
+            if (base64Data.split(',')[0].indexOf('base64') >= 0)
+            byteString = atob(base64Data.split(',')[1]);
+            else
+            byteString = unescape(base64Data.split(',')[1]);
+            var mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
+            var ia = new Uint8Array(byteString.length);
+            for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ia], {type:mimeString});
+          },
+          proView(){
+            var file= _this.dom.file[0].files[0]
+            // document.getElementById("imgPro").src = "Public/img/矢量.png"
+            _this.methods().base64(file,function(base64Data){
+            //base64Data:处理成功返回的图片base64
+              blob = _this.methods().dataURItoBlob(base64Data);
+              _this.dom.imgPro.show()
+              _this.dom.uploadImg.hide()
+              document.getElementById("imgPro").setAttribute("src",base64Data);
+            });
+          },
+          base64(file,backData) {
+            /*
+            * file:input上传图片
+            * backData：处理完成回调函数
+             * */
+            var reader = new FileReader();
+            var image = new Image();
+            var canvas = _this.methods().createCanvas();
+            var ctx = canvas.getContext("2d");
+            reader.onload = function(){ // 文件加载完处理
+              var result = this.result;
+              image.onload = function(){ // 图片加载完处理
+              var imgScale = _this.methods().imgScaleW(1000,this.width,this.height);
+              canvas.width = imgScale.width;
+              canvas.height = imgScale.height;
+              ctx.drawImage(image,0,0,imgScale.width,imgScale.height);
+              var dataURL = canvas.toDataURL('image/jpeg'); // 图片base64
+              ctx.clearRect(0,0,imgScale.width,imgScale.height); // 清除画布
+              backData (dataURL); //dataURL:处理成功返回的图片base64
+            }
+            image.src = result;
+            };
+            reader.readAsDataURL(file);
+          },
+          createCanvas(){ // 创建画布
+              var canvas = document.getElementById('canvas');
+              if(!canvas){
+                  var canvasTag = document.createElement('canvas');
+                  canvasTag.setAttribute('id','canvas');
+                  canvasTag.setAttribute('style','display:none;');//隐藏画布
+                  document.body.appendChild(canvasTag);
+                  canvas = document.getElementById('canvas');
+              }
+              return canvas;
+          },
+          imgScaleW(maxWidth,width,height){
+              /* maxWidth:宽度或者高度最大值
+               * width：宽度
+               * height：高度
+               * */
+              var imgScale = {};
+              var w = 0;
+              var h = 0;
+              if(width <= maxWidth && height <= maxWidth){ // 如果图片宽高都小于限制的最大值,不用缩放
+                  imgScale = {
+                      width:width,
+                      height:height
+                  }
+              }else{
+                  if(width >= height){ // 如果图片宽大于高
+                      w = maxWidth;
+                      h = Math.ceil(maxWidth * height / width);
+                     }else{     // 如果图片高大于宽
+                      h = maxWidth;
+                      w = Math.ceil(maxWidth * width / height);
+                  }
+                  imgScale = {
+                      width:w,
+                      height:h
+                  }
+              }
+              return imgScale;
+          },
+          deleteImg(){
+            if(confirm("你确定删除这张图片吗？")){
+              console.log("ok")
+              _this.dom.imgPro.hide()
+              _this.dom.uploadImg.show()
+              _this.dom.file.val() = ''
+            }else{
+              console.log("no")
+            }
+          }
+        }
+      },
+      eventInit() {
+        var _this = this
+        _this.dom.codeButtom.click(function() {
+          _this.methods().getCode()
+        })
+        _this.dom.mainItemFooter.click(function() {
+          _this.methods().submit()
+        })
+        _this.dom.imgPro.click(function() {
+          _this.methods().deleteImg()
+        })
+        _this.dom.file.change(function() {
+          _this.methods().proView()
+        })
+      },
+      ready() {
+          var _this = this
+          console.log('load')
+          _this.methods().getActivity()
+          _this.dom.imgPro.hide()
+          _this.dom.modal.hide()
+      }
+  })
+})
+
+$(window).resize(function() {
+  //setRem(document, window)
+});
+</script>
+</body>
+</html>
